@@ -21,7 +21,7 @@ set(PROJECT_SOURCES
         game1.h
         game1.ui
         GameState.h
-
+        resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

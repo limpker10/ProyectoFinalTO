@@ -37,8 +37,10 @@ void Game1::setupImages()
 {
     // Crear y configurar las etiquetas de las imágenes
     QLabel* imageLabel1 = new QLabel(this);
+
     // Configurar la imagen para imageLabel1
     QPixmap cuadrado(":/cuadrado.png"); // Cargar el recurso "cuadrado.png" desde el archivo de recursos
+    ui->label->setPixmap(cuadrado);
     imageLabel1->setPixmap(cuadrado);
 
     QLabel* imageLabel2 = new QLabel(this);
@@ -47,7 +49,7 @@ void Game1::setupImages()
 
     // Agregar las etiquetas de las imágenes al vector
     imageLabels.push_back(imageLabel1);
-    imageLabels.push_back(imageLabel2);
+    imageLabels.push_back(ui->label_2);
 
     // Habilitar "drag and drop" en cada etiqueta
     for (QLabel* label : imageLabels) {
@@ -55,19 +57,7 @@ void Game1::setupImages()
     }
 
     // Posicionar y mostrar las etiquetas de las imágenes
-    int x = 10;
-    int y = 10;
-    int spacing = 10;
-    int labelWidth = 100;
-    int labelHeight = 100;
-
-    for (QLabel* label : imageLabels) {
-        label->setGeometry(x, y, labelWidth, labelHeight);
-        label->show();
-
-        // Actualizar las coordenadas para la siguiente etiqueta
-        x += labelWidth + spacing;
-    }
+    // ...
 }
 
 void Game1::enableDragAndDrop(QLabel* label)
@@ -84,12 +74,26 @@ bool Game1::eventFilter(QObject* object, QEvent* event)
         if (mouseEvent->buttons() & Qt::LeftButton) {
             QDrag* drag = new QDrag(this);
             QMimeData* mimeData = new QMimeData;
-            // Establecer los datos de arrastre en mimeData
+            // Configura los datos MIME necesarios para el "drag and drop"
             // ...
             drag->setMimeData(mimeData);
             drag->exec(Qt::MoveAction);
         }
         return true;
     }
+    else if (label && event->type() == QEvent::DragEnter) {
+        QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
+        dragEnterEvent->acceptProposedAction();
+        return true;
+    }
+    else if (label && event->type() == QEvent::Drop) {
+        QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
+        const QMimeData* mimeData = dropEvent->mimeData();
+        // Realiza las acciones necesarias cuando se suelta el objeto arrastrado
+        // ...
+        dropEvent->acceptProposedAction();
+        return true;
+    }
     return false;
 }
+
