@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>C:/Users/josem/Pictures/cuadrado.png</file>
+        <file>C:/Users/josem/Pictures/descarga.jpg</file>
+    </qresource>
+</RCC>
