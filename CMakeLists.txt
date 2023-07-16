@@ -22,6 +22,8 @@ set(PROJECT_SOURCES
         game1.ui
         GameState.h
         resources.qrc
+        dragwidget.cpp
+        dragwidget.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

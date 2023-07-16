@@ -1,14 +1,28 @@
 #include "game1.h"
+#include "qdrag.h"
 #include "ui_game1.h"
-#include <QDrag>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QMimeData>
 #include <QMouseEvent>
+#include <QLabel>
+#include <QDebug>
+#include <QHBoxLayout>
+#include "dragwidget.h"
 
 Game1::Game1(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game1)
 {
     ui->setupUi(this);
+
+    // Habilitar la funcionalidad de arrastrar y soltar en el marco
+    ui->frame->setAcceptDrops(true);
+    QHBoxLayout *horizontalLayout = new QHBoxLayout;
+    horizontalLayout->addWidget(new DragWidget);
+    horizontalLayout->addWidget(new DragWidget);
+    this->setLayout(horizontalLayout);
 }
 
 Game1::~Game1()
@@ -16,17 +30,21 @@ Game1::~Game1()
     delete ui;
 }
 
-void Game1::start(QMainWindow* mainWindow) {
+void Game1::start(QMainWindow* mainWindow)
+{
     // Lógica específica para el estado Game1
     // ...
     mainWindow->setCentralWidget(this);
     this->show();
     qDebug() << "Iniciando el estado Game1";
+
+
     // Configurar las imágenes
-    setupImages();
+    //setupImages();
 }
 
-void Game1::end(QMainWindow* mainWindow) {
+void Game1::end(QMainWindow* mainWindow)
+{
     // Lógica específica para finalizar el estado Game1
     // ...
     this->hide();
@@ -35,65 +53,101 @@ void Game1::end(QMainWindow* mainWindow) {
 
 void Game1::setupImages()
 {
-    // Crear y configurar las etiquetas de las imágenes
-    QLabel* imageLabel1 = new QLabel(this);
+    // Configurar la imagen para la etiqueta label
+    QPixmap cuadrado(":/images/cuadrado.png"); // Cargar el recurso "cuadrado.png" desde el archivo de recursos
 
-    // Configurar la imagen para imageLabel1
-    QPixmap cuadrado(":/cuadrado.png"); // Cargar el recurso "cuadrado.png" desde el archivo de recursos
     ui->label->setPixmap(cuadrado);
-    imageLabel1->setPixmap(cuadrado);
-
-    QLabel* imageLabel2 = new QLabel(this);
-    // Configurar la imagen para imageLabel2
-    // ...
-
-    // Agregar las etiquetas de las imágenes al vector
-    imageLabels.push_back(imageLabel1);
-    imageLabels.push_back(ui->label_2);
-
-    // Habilitar "drag and drop" en cada etiqueta
-    for (QLabel* label : imageLabels) {
-        enableDragAndDrop(label);
-    }
-
-    // Posicionar y mostrar las etiquetas de las imágenes
-    // ...
+    ui->label->setScaledContents(true);
+    ui->label->setAttribute(Qt::WA_DeleteOnClose);
 }
 
-void Game1::enableDragAndDrop(QLabel* label)
+void Game1::dragEnterEvent(QDragEnterEvent *event)
 {
-    label->setAcceptDrops(true);
-    label->installEventFilter(this);
-}
-
-bool Game1::eventFilter(QObject* object, QEvent* event)
-{
-    QLabel* label = qobject_cast<QLabel*>(object);
-    if (label && event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->buttons() & Qt::LeftButton) {
-            QDrag* drag = new QDrag(this);
-            QMimeData* mimeData = new QMimeData;
-            // Configura los datos MIME necesarios para el "drag and drop"
-            // ...
-            drag->setMimeData(mimeData);
-            drag->exec(Qt::MoveAction);
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else {
+            event->acceptProposedAction();
         }
-        return true;
+    } else {
+        event->ignore();
     }
-    else if (label && event->type() == QEvent::DragEnter) {
-        QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
-        dragEnterEvent->acceptProposedAction();
-        return true;
-    }
-    else if (label && event->type() == QEvent::Drop) {
-        QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
-        const QMimeData* mimeData = dropEvent->mimeData();
-        // Realiza las acciones necesarias cuando se suelta el objeto arrastrado
-        // ...
-        dropEvent->acceptProposedAction();
-        return true;
-    }
-    return false;
 }
 
+void Game1::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
+}
+
+void Game1::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
+        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+
+        QPixmap pixmap;
+        QPoint offset;
+        dataStream >> pixmap >> offset;
+
+        QLabel *newIcon = new QLabel(ui->frame);
+        newIcon->setPixmap(pixmap);
+        newIcon->move(event->position().toPoint() - offset);
+        newIcon->show();
+        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+            // Verificar si la imagen se movió al marco
+            if (ui->frame->geometry().contains(event->pos())) {
+                qDebug() << "La imagen se movió al marco.";
+            }
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
+}
+
+void Game1::mousePressEvent(QMouseEvent *event)
+{
+    QLabel *child = static_cast<QLabel*>(childAt(event->position().toPoint()));
+    if (!child)
+        return;
+
+    QPixmap pixmap = child->pixmap();
+
+    QByteArray itemData;
+    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+    dataStream << pixmap << QPoint(event->position().toPoint() - child->pos());
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("application/x-dnditemdata", itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(event->position().toPoint() - child->pos());
+
+    QPixmap tempPixmap = pixmap;
+
+    child->setPixmap(tempPixmap);
+
+    if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction) {
+        child->close();
+    } else {
+        child->show();
+        child->setPixmap(pixmap);
+    }
+}
