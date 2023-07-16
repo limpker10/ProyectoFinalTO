@@ -3,5 +3,6 @@
         <file>images/cuadrado.png</file>
         <file>images/triangulo.png</file>
         <file>images/circulo.png</file>
+        <file>images/box.png</file>
     </qresource>
 </RCC>
