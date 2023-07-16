@@ -27,8 +27,10 @@ private:
     void enableDragAndDrop(QLabel* label); // Función para habilitar "drag and drop" en una etiqueta
 
 protected:
-    bool eventFilter(QObject* object, QEvent* event) override;
-
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // GAME1_H
