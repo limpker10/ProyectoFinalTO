@@ -18,10 +18,18 @@
 	background-image: url(:/images/fondoArcoiris.png);
 	background-repeat: no-repeat;
 }
-QHBoxLayout&gt;QFrame
-{
+QHBoxLayout &gt; QFrame {
 	border: solid black;
 	border-radius: 10px; 
+	background: red;
+}
+
+QPushButton
+{
+	background:rgb(28, 127, 189);
+	padding:3px;
+	border-radius: 10px;
+font-size:28px;
 }
 </string>
   </property>
@@ -47,14 +55,14 @@ QHBoxLayout&gt;QFrame
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButtonReset">
       <property name="text">
        <string>Reset</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButtonSalir">
       <property name="text">
        <string>Salir</string>
       </property>

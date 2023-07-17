@@ -5,10 +5,9 @@
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
 {
-    setMinimumSize(200, 200);
-    setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+    //setMinimumSize(200, 200);
+    setFrameStyle(QFrame::Box  | QFrame::Raised);
     setAcceptDrops(true);
-
 
     QLabel *cuadrado = new QLabel(this);
     cuadrado->setPixmap(QPixmap(":/images/cuadrado.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -85,7 +84,6 @@ void DragWidget::dropEvent(QDropEvent *event)
         newIcon->move(event->position().toPoint() - offset);
         newIcon->show();
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
-        ////
 
         QRect newIconRect = newIcon->geometry();
 
@@ -100,7 +98,7 @@ void DragWidget::dropEvent(QDropEvent *event)
             qDebug() << "La nueva imagen no está encima de un QLabel con el ID 'box'.";
         }
 
-        ///
+
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();

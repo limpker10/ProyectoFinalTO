@@ -8,20 +8,22 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow,public GameState
 {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void switchToState(GameState* state);
     ~MainWindow();
 
 private slots:
     void onGame1ButtonClicked();
-    void onGame2ButtonClicked();
+    void onGame1SignalReceived();
 
 private:
-    void switchToState(GameState* state);
+    void start();
+    void end();
     Ui::MainWindow *ui;
     GameState* currentState;
 };

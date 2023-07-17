@@ -84,7 +84,7 @@ QPushButton
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Records</string>
+     <string>Ranking</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">

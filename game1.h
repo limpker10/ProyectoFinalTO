@@ -15,22 +15,17 @@ class Game1 : public QWidget, public GameState
 
 public:
     explicit Game1(QWidget *parent = nullptr);
-    void start(QMainWindow* mainWindow) override;
-    void end(QMainWindow* mainWindow) override;
+    void start() override;
+    void end() override;
     ~Game1();
+
+signals:
+    void game1Signal();
 
 
 private:
     Ui::Game1 *ui;
-    QVector<QLabel*> imageLabels; // Vector para almacenar las etiquetas de las imágenes
-    void setupImages(); // Función para configurar las imágenes
-    void enableDragAndDrop(QLabel* label); // Función para habilitar "drag and drop" en una etiqueta
 
-protected:
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // GAME1_H
