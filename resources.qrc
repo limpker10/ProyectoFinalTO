@@ -4,5 +4,7 @@
         <file>images/triangulo.png</file>
         <file>images/circulo.png</file>
         <file>images/box.png</file>
+        <file>images/fondoArcoiris.png</file>
+        <file>images/colores_formas.png</file>
     </qresource>
 </RCC>

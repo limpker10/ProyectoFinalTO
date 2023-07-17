@@ -9,23 +9,24 @@ DragWidget::DragWidget(QWidget *parent)
     setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(true);
 
+
     QLabel *cuadrado = new QLabel(this);
     cuadrado->setPixmap(QPixmap(":/images/cuadrado.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    //cuadrado->move(10, 10);
+    cuadrado->move(79, 120);
     cuadrado->show();
     cuadrado->setAttribute(Qt::WA_DeleteOnClose);
     cuadrado->setProperty("imageId", "cuadrado");
 
     QLabel *triangulo = new QLabel(this);
     triangulo->setPixmap(QPixmap(":/images/triangulo.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    //triangulo->move(100, 10);
+    triangulo->move(200, 110);
     triangulo->show();
     triangulo->setAttribute(Qt::WA_DeleteOnClose);
     triangulo->setProperty("imageId", "triangulo");
 
     QLabel *circulo = new QLabel(this);
     circulo->setPixmap(QPixmap(":/images/circulo.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    //circulo->move(10, 80);
+    circulo->move(130, 240);
     circulo->show();
     circulo->setAttribute(Qt::WA_DeleteOnClose);
     circulo->setProperty("imageId", "circulo");
