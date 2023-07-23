@@ -6,5 +6,8 @@
         <file>images/box.png</file>
         <file>images/fondoArcoiris.png</file>
         <file>images/colores_formas.png</file>
+        <file>images/circulo_red.png</file>
+        <file>images/circulo_morado.png</file>
+        <file>images/circulo_naranja.png</file>
     </qresource>
 </RCC>

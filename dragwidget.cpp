@@ -9,8 +9,11 @@ DragWidget::DragWidget(QWidget *parent)
     setFrameStyle(QFrame::Box  | QFrame::Raised);
     setAcceptDrops(true);
 
+    shrinkAnimation = new QPropertyAnimation(this, "geometry");
+    shrinkAnimation->setDuration(1000);
+
     QLabel *cuadrado = new QLabel(this);
-    cuadrado->setPixmap(QPixmap(":/images/cuadrado.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    cuadrado->setPixmap(QPixmap(":/images/circulo_red.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     cuadrado->move(79, 120);
     cuadrado->show();
     cuadrado->setAttribute(Qt::WA_DeleteOnClose);
@@ -93,7 +96,15 @@ void DragWidget::dropEvent(QDropEvent *event)
         });
 
         if (isOverBox) {
+            QPixmap scaledPixmap = pixmap.scaled(QSize(pixmap.width() / 2, pixmap.height() / 2), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            newIcon->setPixmap(scaledPixmap);
+            shrinkAnimation->setTargetObject(newIcon);
+            shrinkAnimation->setStartValue(newIconRect);
+            shrinkAnimation->setEndValue(QRect(newIconRect.x(), newIconRect.y(), newIconRect.width() / 2, newIconRect.height() / 2));
+
             qDebug() << "La nueva imagen está encima de un QLabel con el ID 'box'.";
+            // Iniciar la animacion
+            shrinkAnimation->start();
         } else {
             qDebug() << "La nueva imagen no está encima de un QLabel con el ID 'box'.";
         }

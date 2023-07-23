@@ -1,6 +1,7 @@
 #ifndef DRAGWIDGET_H
 #define DRAGWIDGET_H
 
+#include "qpropertyanimation.h"
 #include <QFrame>
 
 QT_BEGIN_NAMESPACE
@@ -14,6 +15,7 @@ public:
     explicit DragWidget(QWidget *parent = nullptr);
 
 private:
+    QPropertyAnimation* shrinkAnimation;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
