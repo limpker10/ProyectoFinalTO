@@ -26,6 +26,8 @@ signals:
 private:
     Ui::Game1 *ui;
 
+private slots:
+    void handleItemDroppedOnBox();
 };
 
 #endif // GAME1_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
-    <height>645</height>
+    <width>1136</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,9 +37,9 @@ font-size:28px;
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>30</y>
-     <width>771</width>
-     <height>481</height>
+     <y>20</y>
+     <width>901</width>
+     <height>541</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout"/>
@@ -47,8 +47,8 @@ font-size:28px;
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>540</y>
+     <x>190</x>
+     <y>580</y>
      <width>731</width>
      <height>80</height>
     </rect>
@@ -73,7 +73,7 @@ font-size:28px;
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>820</x>
+     <x>940</x>
      <y>30</y>
      <width>184</width>
      <height>301</height>
@@ -93,7 +93,10 @@ font-size:28px;
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="plainTextEdit">
+     <widget class="QPlainTextEdit" name="plainTextEditScore">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="font">
        <font>
         <pointsize>25</pointsize>
@@ -114,7 +117,10 @@ font-size:28px;
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="plainTextEdit_2">
+     <widget class="QPlainTextEdit" name="intentosText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="font">
        <font>
         <pointsize>25</pointsize>

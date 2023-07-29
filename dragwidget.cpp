@@ -1,47 +1,52 @@
 #include <QtWidgets>
 
 #include "dragwidget.h"
+#include <QtMultimedia/QMediaPlayer>
+#include "qlabelfactory.h"
 
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
 {
-    //setMinimumSize(200, 200);
+
+    setupFrame();
+    setupAnimation();
+    createFigures();
+    createBoxes();
+}
+
+void DragWidget::setupFrame()
+{
     setFrameStyle(QFrame::Box  | QFrame::Raised);
     setAcceptDrops(true);
+}
 
+void DragWidget::setupAnimation()
+{
     shrinkAnimation = new QPropertyAnimation(this, "geometry");
     shrinkAnimation->setDuration(1000);
+}
 
-    QLabel *cuadrado = new QLabel(this);
-    cuadrado->setPixmap(QPixmap(":/images/circulo_red.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    cuadrado->move(79, 120);
-    cuadrado->show();
-    cuadrado->setAttribute(Qt::WA_DeleteOnClose);
-    cuadrado->setProperty("imageId", "cuadrado");
+void DragWidget::createFigures()
+{
+    QLabelFactory::createLabel(this, ":/images/circulo_red.png", QSize(100, 100), QPoint(79, 120), "cuadrado");
+    QLabelFactory::createLabel(this, ":/images/triangulo.png", QSize(100, 100), QPoint(200, 110), "triangulo");
+    QLabelFactory::createLabel(this, ":/images/circulo.png", QSize(100, 100), QPoint(130, 240), "circulo");
+}
 
-    QLabel *triangulo = new QLabel(this);
-    triangulo->setPixmap(QPixmap(":/images/triangulo.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    triangulo->move(200, 110);
-    triangulo->show();
-    triangulo->setAttribute(Qt::WA_DeleteOnClose);
-    triangulo->setProperty("imageId", "triangulo");
+void DragWidget::createBoxes()
+{
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    vLayout->setAlignment(Qt::AlignRight);
 
-    QLabel *circulo = new QLabel(this);
-    circulo->setPixmap(QPixmap(":/images/circulo.png").scaled(QSize(100, 100), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    circulo->move(130, 240);
-    circulo->show();
-    circulo->setAttribute(Qt::WA_DeleteOnClose);
-    circulo->setProperty("imageId", "circulo");
+    QLabel *label1 = QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), QPoint(), "box");
+    QLabel *label2 = QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), QPoint(), "box");
+    QLabel *label3 = QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), QPoint(), "box");
 
-    QLabel *box = new QLabel(this);
-    box->setPixmap(QPixmap(":/images/box.png").scaled(QSize(200, 170), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    int box1X = width() - box->width() - 10; // Posicionar a la derecha
-    int box1Y = 10; // Posicionar en la parte superior
-    box->move(box1X, box1Y);
-    box->show();
-    box->setAttribute(Qt::WA_DeleteOnClose);
-    box->setProperty("imageId", "box");
+    vLayout->addWidget(label1);
+    vLayout->addWidget(label2);
+    vLayout->addWidget(label3);
 
+    setLayout(vLayout);
 }
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
@@ -91,11 +96,16 @@ void DragWidget::dropEvent(QDropEvent *event)
         QRect newIconRect = newIcon->geometry();
 
         QList<QLabel *> childLabels = findChildren<QLabel *>();
+        QLabel* boxLabel = nullptr;
         auto isOverBox = std::any_of(childLabels.begin(), childLabels.end(), [&](QLabel *label) {
-            return label->property("imageId") == "box" && label->geometry().contains(newIcon->geometry());
+            if(label->property("imageId") == "box" && label->geometry().contains(newIcon->geometry())){
+                boxLabel = label;
+                return true;
+            }
+            return false;
         });
 
-        if (isOverBox) {
+        if (isOverBox && boxLabel) {
             QPixmap scaledPixmap = pixmap.scaled(QSize(pixmap.width() / 2, pixmap.height() / 2), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             newIcon->setPixmap(scaledPixmap);
             shrinkAnimation->setTargetObject(newIcon);
@@ -103,12 +113,19 @@ void DragWidget::dropEvent(QDropEvent *event)
             shrinkAnimation->setEndValue(QRect(newIconRect.x(), newIconRect.y(), newIconRect.width() / 2, newIconRect.height() / 2));
 
             qDebug() << "La nueva imagen está encima de un QLabel con el ID 'box'.";
-            // Iniciar la animacion
-            shrinkAnimation->start();
+                        // Iniciar la animacion
+                        shrinkAnimation->start();
+            // Emitir la señal cuando se cumple la condición
+            emit itemDroppedOnBox();
+
+            // Reproduce un sonido
+            //QSound::play(":/sounds/success.wav");
+
+            // Elimina el QLabel que está sobre el box
+            //boxLabel->deleteLater();
         } else {
             qDebug() << "La nueva imagen no está encima de un QLabel con el ID 'box'.";
         }
-
 
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -120,6 +137,7 @@ void DragWidget::dropEvent(QDropEvent *event)
         event->ignore();
     }
 }
+
 
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
