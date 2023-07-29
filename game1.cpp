@@ -6,11 +6,11 @@ Game1::Game1(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game1)
 {
+    ui->setupUi(this);
     DragWidget* dragWidget = new DragWidget(this);
     dragWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->setupUi(this);
     ui->horizontalLayout->addWidget(dragWidget);
-    ui->horizontalLayout->setStretchFactor(dragWidget, 1);
+    //ui->horizontalLayout->setStretchFactor(dragWidget, 1);
 
     connect(ui->pushButtonSalir, &QPushButton::clicked, this, &Game1::end);
     // Conectar la señal itemDroppedOnBox() de DragWidget a la ranura handleItemDroppedOnBox() de Game1

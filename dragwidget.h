@@ -1,6 +1,7 @@
 #ifndef DRAGWIDGET_H
 #define DRAGWIDGET_H
 
+#include "qlabel.h"
 #include "qpropertyanimation.h"
 #include <QFrame>
 
@@ -18,13 +19,15 @@ public:
 private:
     QPropertyAnimation* shrinkAnimation;
     void setupFrame();
-    void setupAnimation();
     void createFigures();
     void createBoxes();
+    std::pair<bool, QLabel*> findBoxLabel(const QPoint&);
+    void handleItemDroppedOnBox(QLabel*,QPixmap);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+    QPoint randomPointWithinFrame();
 
 signals:
     void itemDroppedOnBox();

@@ -12,5 +12,7 @@
         <file>sounds/soundambient.mp3</file>
         <file>sounds/soundambient.wav</file>
         <file>sounds/sound_2.wav</file>
+        <file>sounds/sound_1.wav</file>
+        <file>sounds/game1_sound01.wav</file>
     </qresource>
 </RCC>
