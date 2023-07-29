@@ -1,8 +1,9 @@
 #include <QtWidgets>
 
 #include "dragwidget.h"
-#include <QtMultimedia/QMediaPlayer>
+#include <QMediaPlayer>
 #include "qlabelfactory.h"
+#include "SoundManager.h"
 
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
@@ -12,6 +13,7 @@ DragWidget::DragWidget(QWidget *parent)
     setupAnimation();
     createFigures();
     createBoxes();
+    SoundManager::instance().playBackgroundMusic("qrc:/sounds/soundambient.wav");
 }
 
 void DragWidget::setupFrame()
@@ -119,7 +121,7 @@ void DragWidget::dropEvent(QDropEvent *event)
             emit itemDroppedOnBox();
 
             // Reproduce un sonido
-            //QSound::play(":/sounds/success.wav");
+            SoundManager::instance().playSound("qrc:/sounds/sound_2.wav");
 
             // Elimina el QLabel que está sobre el box
             //boxLabel->deleteLater();

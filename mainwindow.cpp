@@ -2,6 +2,7 @@
 #include "game1.h"
 #include "qpushbutton.h"
 #include "ui_mainwindow.h"
+#include "SoundManager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -10,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::onGame1ButtonClicked);
+    SoundManager::instance().playBackgroundMusic("qrc:/sounds/soundambient.wav");
 }
 
 MainWindow::~MainWindow()

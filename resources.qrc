@@ -9,5 +9,8 @@
         <file>images/circulo_red.png</file>
         <file>images/circulo_morado.png</file>
         <file>images/circulo_naranja.png</file>
+        <file>sounds/soundambient.mp3</file>
+        <file>sounds/soundambient.wav</file>
+        <file>sounds/sound_2.wav</file>
     </qresource>
 </RCC>
