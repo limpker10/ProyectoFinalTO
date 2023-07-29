@@ -6,47 +6,129 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>368</height>
+    <width>1136</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <property name="styleSheet">
+   <string notr="true">#Game1 {
+	background-image: url(:/images/fondoArcoiris.png);
+	background-repeat: no-repeat;
+}
+QHBoxLayout &gt; QFrame {
+	border: solid black;
+	border-radius: 10px; 
+	background: red;
+}
+
+QPushButton
+{
+	background:rgb(28, 127, 189);
+	padding:3px;
+	border-radius: 10px;
+font-size:28px;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>80</y>
-     <width>151</width>
-     <height>101</height>
+     <x>190</x>
+     <y>580</y>
+     <width>731</width>
+     <height>80</height>
     </rect>
    </property>
-   <property name="text">
-    <string>State A</string>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QPushButton" name="pushButtonReset">
+      <property name="text">
+       <string>Reset</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButtonSalir">
+      <property name="text">
+       <string>Salir</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>50</y>
-     <width>221</width>
-     <height>251</height>
+     <x>940</x>
+     <y>30</y>
+     <width>184</width>
+     <height>301</height>
     </rect>
    </property>
-   <property name="acceptDrops">
-    <bool>true</bool>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>30</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>SCORE</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEditScore">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>25</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <pointsize>30</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>INTENTOS</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="intentosText">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>25</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>901</width>
+     <height>551</height>
+    </rect>
    </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout"/>
   </widget>
  </widget>
  <resources/>

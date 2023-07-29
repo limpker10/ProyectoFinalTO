@@ -3,5 +3,16 @@
         <file>images/cuadrado.png</file>
         <file>images/triangulo.png</file>
         <file>images/circulo.png</file>
+        <file>images/box.png</file>
+        <file>images/fondoArcoiris.png</file>
+        <file>images/colores_formas.png</file>
+        <file>images/circulo_red.png</file>
+        <file>images/circulo_morado.png</file>
+        <file>images/circulo_naranja.png</file>
+        <file>sounds/soundambient.mp3</file>
+        <file>sounds/soundambient.wav</file>
+        <file>sounds/sound_2.wav</file>
+        <file>sounds/sound_1.wav</file>
+        <file>sounds/game1_sound01.wav</file>
     </qresource>
 </RCC>

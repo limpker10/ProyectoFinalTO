@@ -1,31 +1,66 @@
 #include <QtWidgets>
 
 #include "dragwidget.h"
+#include <QMediaPlayer>
+#include "qlabelfactory.h"
+#include "SoundManager.h"
 
 DragWidget::DragWidget(QWidget *parent)
     : QFrame(parent)
 {
-    setMinimumSize(200, 200);
-    setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+
+    setupFrame();
+    createFigures();
+    createBoxes();
+    SoundManager::instance().playBackgroundMusic("qrc:/sounds/game1_sound01.wav");
+}
+
+void DragWidget::setupFrame()
+{
+    setFrameStyle(QFrame::Box  | QFrame::Raised);
     setAcceptDrops(true);
+}
 
-    QLabel *cuadrado = new QLabel(this);
-    cuadrado->setPixmap(QPixmap(":/images/cuadrado.png").scaled(cuadrado->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    cuadrado->move(10, 10);
-    cuadrado->show();
-    cuadrado->setAttribute(Qt::WA_DeleteOnClose);
+void DragWidget::createFigures()
+{
+    QLabelFactory::createLabel(this, ":/images/circulo_red.png", QSize(100, 100), randomPointWithinFrame(), "cuadrado");
+    QLabelFactory::createLabel(this, ":/images/triangulo.png", QSize(100, 100), randomPointWithinFrame(), "triangulo");
+    QLabelFactory::createLabel(this, ":/images/circulo.png", QSize(100, 100), randomPointWithinFrame(), "circulo");
+    QLabelFactory::createLabel(this, ":/images/circulo_red.png", QSize(100, 100), randomPointWithinFrame(), "cuadrado");
+    QLabelFactory::createLabel(this, ":/images/triangulo.png", QSize(100, 100), randomPointWithinFrame(), "triangulo");
+    QLabelFactory::createLabel(this, ":/images/circulo.png", QSize(100, 100), randomPointWithinFrame(), "circulo");
 
-    QLabel *triangulo = new QLabel(this);
-    triangulo->setPixmap(QPixmap(":/images/triangulo.png").scaled(triangulo->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    triangulo->move(100, 10);
-    triangulo->show();
-    triangulo->setAttribute(Qt::WA_DeleteOnClose);
+}
 
-    QLabel *circulo = new QLabel(this);
-    circulo->setPixmap(QPixmap(":/images/circulo.png").scaled(circulo->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    circulo->move(10, 80);
-    circulo->show();
-    circulo->setAttribute(Qt::WA_DeleteOnClose);
+QPoint DragWidget::randomPointWithinFrame() {
+    int margin = 10;  // Margen para evitar que las labels se posicionen en los bordes del frame
+    int maxWidth = 601;
+    int maxHeight = 400;
+    int x = QRandomGenerator::global()->bounded(margin, maxWidth);
+    int y = QRandomGenerator::global()->bounded(margin, maxHeight);
+    return QPoint(x, y);
+}
+void DragWidget::createBoxes()
+{
+    int spacing = 20; // Espacio entre etiquetas
+    int marginRight = 30; // Margen derecho
+    int marginLeft = 400; // Margen derecho
+    int marginTop = 0; // Margen superior
+
+    // Obtenemos el tamaño de la ventana
+    QSize windowSize = this->size();
+
+    // Posicionamos la primera etiqueta en la parte superior derecha de la ventana
+    QPoint position1(windowSize.width()+ 200 + marginLeft - marginRight, marginTop);
+
+    // Para las siguientes etiquetas, ajustamos la posición verticalmente, sumando la altura de la etiqueta anterior y el espaciado
+    QPoint position2(windowSize.width() + 200 + marginLeft - marginRight, position1.y() + 170 + spacing);
+    QPoint position3(windowSize.width() + 200 + marginLeft - marginRight, position2.y() + 170 + spacing);
+
+    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position1, "box");
+    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position2, "box");
+    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position3, "box");
+
 }
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
@@ -72,6 +107,35 @@ void DragWidget::dropEvent(QDropEvent *event)
         newIcon->show();
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
 
+        QRect newIconRect = newIcon->geometry();
+
+        QList<QLabel *> childLabels = findChildren<QLabel *>();
+        //QLabel* boxLabel = nullptr;
+        auto [isOverBox, boxLabel] = findBoxLabel(newIcon->geometry().center());
+//        auto isOverBox = std::any_of(childLabels.begin(), childLabels.end(), [&](QLabel *label) {
+//            if(label->property("imageId") == "box" && label->geometry().contains(newIcon->geometry())){
+//                boxLabel = label;
+//                return true;
+//            }
+//            return false;
+//        });
+
+        if (isOverBox && boxLabel) {
+            handleItemDroppedOnBox(newIcon,pixmap);
+//            QPixmap scaledPixmap = pixmap.scaled(QSize(pixmap.width() / 2, pixmap.height() / 2), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//            newIcon->setPixmap(scaledPixmap);
+
+//            qDebug() << "La nueva imagen está encima de un QLabel con el ID 'box'.";
+
+//            // Emitir la señal cuando se cumple la condición
+//            emit itemDroppedOnBox();
+
+//            // Reproduce un sonido
+//            SoundManager::instance().playSound("qrc:/sounds/sound_2.wav");
+        } else {
+            qDebug() << "La nueva imagen no está encima de un QLabel con el ID 'box'.";
+        }
+
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -83,11 +147,42 @@ void DragWidget::dropEvent(QDropEvent *event)
     }
 }
 
+// Add this private method to the DragWidget class
+std::pair<bool, QLabel*> DragWidget::findBoxLabel(const QPoint& position)
+{
+    QList<QLabel*> childLabels = findChildren<QLabel*>();
+    QLabel* boxLabel = nullptr;
+    bool isOverBox = std::any_of(childLabels.begin(), childLabels.end(), [&](QLabel* label) {
+        if (label->property("imageId") == "box" && label->geometry().contains(position)) {
+            boxLabel = label;
+            return true;
+        }
+        return false;
+    });
+
+    return { isOverBox, boxLabel };
+}
+
+void DragWidget::handleItemDroppedOnBox(QLabel* newIcon, QPixmap pixmap)
+{
+    QPixmap scaledPixmap = pixmap.scaled(QSize(pixmap.width() / 2, pixmap.height() / 2), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    newIcon->setPixmap(scaledPixmap);
+
+    qDebug() << "La nueva imagen está encima de un QLabel con el ID 'box'.";
+
+    // Emitir la señal cuando se cumple la condición
+    emit itemDroppedOnBox();
+
+    // Reproduce un sonido
+    SoundManager::instance().playSound("qrc:/sounds/sound_2.wav");
+}
+
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
     QLabel *child = static_cast<QLabel*>(childAt(event->position().toPoint()));
-    if (!child)
+    if (!child || child->property("imageId").toString() == "box") {
         return;
+    }
 
     QPixmap pixmap = child->pixmap();
 
