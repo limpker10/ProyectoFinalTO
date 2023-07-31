@@ -28,13 +28,13 @@ public:
     void playSound(const QString& sound)
     {
         player->setSource(QUrl(sound));
-        player->setVolume(0.25f);
+        player->setVolume(0.10f);
         player->play();
     }
 
     void playBackgroundMusic(const QString& musicResourcePath) {
         backgroundMusicPlayer->setSource(QUrl(musicResourcePath));
-         player->setVolume(0.25f);
+         player->setVolume(0.10f);
         backgroundMusicPlayer->play();
     }
 };

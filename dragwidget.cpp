@@ -107,31 +107,11 @@ void DragWidget::dropEvent(QDropEvent *event)
         newIcon->show();
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
 
-        QRect newIconRect = newIcon->geometry();
-
-        QList<QLabel *> childLabels = findChildren<QLabel *>();
-        //QLabel* boxLabel = nullptr;
         auto [isOverBox, boxLabel] = findBoxLabel(newIcon->geometry().center());
-//        auto isOverBox = std::any_of(childLabels.begin(), childLabels.end(), [&](QLabel *label) {
-//            if(label->property("imageId") == "box" && label->geometry().contains(newIcon->geometry())){
-//                boxLabel = label;
-//                return true;
-//            }
-//            return false;
-//        });
 
         if (isOverBox && boxLabel) {
             handleItemDroppedOnBox(newIcon,pixmap);
-//            QPixmap scaledPixmap = pixmap.scaled(QSize(pixmap.width() / 2, pixmap.height() / 2), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//            newIcon->setPixmap(scaledPixmap);
 
-//            qDebug() << "La nueva imagen está encima de un QLabel con el ID 'box'.";
-
-//            // Emitir la señal cuando se cumple la condición
-//            emit itemDroppedOnBox();
-
-//            // Reproduce un sonido
-//            SoundManager::instance().playSound("qrc:/sounds/sound_2.wav");
         } else {
             qDebug() << "La nueva imagen no está encima de un QLabel con el ID 'box'.";
         }
@@ -147,7 +127,6 @@ void DragWidget::dropEvent(QDropEvent *event)
     }
 }
 
-// Add this private method to the DragWidget class
 std::pair<bool, QLabel*> DragWidget::findBoxLabel(const QPoint& position)
 {
     QList<QLabel*> childLabels = findChildren<QLabel*>();
