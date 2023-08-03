@@ -65,7 +65,7 @@ font-size:28px;
      <x>940</x>
      <y>30</y>
      <width>184</width>
-     <height>301</height>
+     <height>131</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -83,30 +83,6 @@ font-size:28px;
     </item>
     <item>
      <widget class="QPlainTextEdit" name="plainTextEditScore">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>25</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="font">
-       <font>
-        <pointsize>30</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>INTENTOS</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPlainTextEdit" name="intentosText">
       <property name="enabled">
        <bool>false</bool>
       </property>

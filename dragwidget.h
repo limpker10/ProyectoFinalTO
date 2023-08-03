@@ -4,19 +4,20 @@
 #include <QFrame>
 #include "Draggable.h"
 #include "FigureManager.h"
+#include "qlabelfactory.h"
 
 class DragWidget : public QFrame, public FigureManager, public Draggable
 {
     Q_OBJECT
+    QLabelFactory labelFactory;
 public:
     explicit DragWidget(QWidget *parent = nullptr);
-
     // Implementación de métodos de FigureManager
     void createFigures() override;
     void createBoxes() override;
     std::pair<bool, QLabel*> findBoxLabel(const QPoint&) override;
     void handleItemDroppedOnBox(QLabel*, QPixmap) override;
-    QPoint randomPointWithinFrame() override;
+
 
     // Implementación de métodos de Draggable
     void dragEnterEvent(QDragEnterEvent *event) override;
