@@ -18,6 +18,6 @@ public:
     virtual void createBoxes() = 0;
     virtual std::pair<bool, QLabel*> findBoxLabel(const QPoint&) = 0;
     virtual void handleItemDroppedOnBox(QLabel*, QPixmap) = 0;
-    virtual QPoint randomPointWithinFrame() = 0;
+
 };
 #endif // FIGUREMANAGER_H

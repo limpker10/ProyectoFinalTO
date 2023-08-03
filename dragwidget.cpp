@@ -23,23 +23,19 @@ void DragWidget::setupFrame()
 
 void DragWidget::createFigures()
 {
-    QLabelFactory::createLabel(this, ":/images/circulo_red.png", QSize(100, 100), randomPointWithinFrame(), "cuadrado");
-    QLabelFactory::createLabel(this, ":/images/triangulo.png", QSize(100, 100), randomPointWithinFrame(), "triangulo");
-    QLabelFactory::createLabel(this, ":/images/circulo.png", QSize(100, 100), randomPointWithinFrame(), "circulo");
-    QLabelFactory::createLabel(this, ":/images/circulo_red.png", QSize(100, 100), randomPointWithinFrame(), "cuadrado");
-    QLabelFactory::createLabel(this, ":/images/triangulo.png", QSize(100, 100), randomPointWithinFrame(), "triangulo");
-    QLabelFactory::createLabel(this, ":/images/circulo.png", QSize(100, 100), randomPointWithinFrame(), "circulo");
+
+    labelFactory.createFigureLabel(this, ":/images/circulo_red.png", "circulo");
+    labelFactory.createFigureLabel(this, ":/images/cuadrado.png", "cuadrado");
+    labelFactory.createFigureLabel(this, ":/images/triangulo.png",  "triangulo");
+    labelFactory.createFigureLabel(this, ":/images/circulo.png",  "circulo");
+    labelFactory.createFigureLabel(this, ":/images/circulo_red.png", "cuadrado");
+    labelFactory.createFigureLabel(this, ":/images/triangulo.png", "triangulo");
+    labelFactory.createFigureLabel(this, ":/images/cuadrado.png", "cuadrado");
+    labelFactory.createFigureLabel(this, ":/images/cuadrado.png", "cuadrado");
 
 }
 
-QPoint DragWidget::randomPointWithinFrame() {
-    int margin = 10;  // Margen para evitar que las labels se posicionen en los bordes del frame
-    int maxWidth = 601;
-    int maxHeight = 400;
-    int x = QRandomGenerator::global()->bounded(margin, maxWidth);
-    int y = QRandomGenerator::global()->bounded(margin, maxHeight);
-    return QPoint(x, y);
-}
+
 void DragWidget::createBoxes()
 {
     int spacing = 20; // Espacio entre etiquetas
@@ -50,16 +46,16 @@ void DragWidget::createBoxes()
     // Obtenemos el tamaño de la ventana
     QSize windowSize = this->size();
 
-    // Posicionamos la primera etiqueta en la parte superior derecha de la ventana
+    // parte superior derecha de la ventana
     QPoint position1(windowSize.width()+ 200 + marginLeft - marginRight, marginTop);
 
-    // Para las siguientes etiquetas, ajustamos la posición verticalmente, sumando la altura de la etiqueta anterior y el espaciado
+    // Ajuste posición verticalmente, sumando la altura de la etiqueta anterior y el espaciado
     QPoint position2(windowSize.width() + 200 + marginLeft - marginRight, position1.y() + 170 + spacing);
     QPoint position3(windowSize.width() + 200 + marginLeft - marginRight, position2.y() + 170 + spacing);
 
-    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position1, "box");
-    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position2, "box");
-    QLabelFactory::createLabel(this, ":/images/box.png", QSize(200, 170), position3, "box");
+    labelFactory.createBoxLabel(this, ":/images/box.png", position1,"box");
+    labelFactory.createBoxLabel(this, ":/images/box.png", position2,"box");
+    labelFactory.createBoxLabel(this, ":/images/box.png", position3,"box");
 
 }
 
